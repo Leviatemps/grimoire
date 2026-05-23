@@ -1,29 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Tabs, router } from 'expo-router';
-import { View, StyleSheet, Platform, Pressable } from 'react-native';
+import { View, StyleSheet, Platform, Pressable, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
 
 function AddButton() {
-  const scale = useSharedValue(1);
+  const scale = useRef(new Animated.Value(1)).current;
 
-  const animStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
+  const onPressIn = () => {
+    Animated.spring(scale, { toValue: 0.9, useNativeDriver: true }).start();
+  };
+  const onPressOut = () => {
+    Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start();
+  };
 
   return (
     <Pressable
       onPress={() => router.push('/add')}
-      onPressIn={() => { scale.value = withSpring(0.9); }}
-      onPressOut={() => { scale.value = withSpring(1); }}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
     >
-      <Animated.View style={[styles.addButton, animStyle]}>
+      <Animated.View style={[styles.addButton, { transform: [{ scale }] }]}>
         <Ionicons name="add" size={28} color="#fff" />
       </Animated.View>
     </Pressable>

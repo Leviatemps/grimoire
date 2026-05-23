@@ -1,11 +1,5 @@
-import React, { useEffect } from 'react';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withDelay,
-  Easing,
-} from 'react-native-reanimated';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Easing } from 'react-native';
 import { ItemCard } from './ItemCard';
 import { Item } from '../types';
 
@@ -17,22 +11,31 @@ interface AnimatedItemCardProps {
 }
 
 export function AnimatedItemCard({ item, index, onPress, onLongPress }: AnimatedItemCardProps) {
-  const opacity     = useSharedValue(0);
-  const translateY  = useSharedValue(20);
+  const opacity    = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(20)).current;
 
   useEffect(() => {
-    const delay = Math.min(index * 60, 300); // cap at 300ms
-    opacity.value    = withDelay(delay, withTiming(1,  { duration: 280, easing: Easing.out(Easing.quad) }));
-    translateY.value = withDelay(delay, withTiming(0,  { duration: 280, easing: Easing.out(Easing.quad) }));
+    const delay = Math.min(index * 60, 300);
+    Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 280,
+        delay,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 280,
+        delay,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+    ]).start();
   }, []);
 
-  const animStyle = useAnimatedStyle(() => ({
-    opacity:   opacity.value,
-    transform: [{ translateY: translateY.value }],
-  }));
-
   return (
-    <Animated.View style={animStyle}>
+    <Animated.View style={{ opacity, transform: [{ translateY }] }}>
       <ItemCard item={item} onPress={onPress} onLongPress={onLongPress} />
     </Animated.View>
   );
