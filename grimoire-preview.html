@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grimoire — Aperçu</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f0f2f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 40px;
+  color: #111827;
+}
+
+/* ── Header ── */
+.page-header {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.logo { font-size: 22px; font-weight: 700; color: #6366f1; letter-spacing: -0.5px; }
+.logo span { color: #111827; }
+.badge { background: #eef2ff; color: #6366f1; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+.screen-tabs {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.screen-tab {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid #e5e7eb;
+  background: #fff;
+  color: #6b7280;
+  transition: all .18s;
+}
+.screen-tab.active { background: #6366f1; color: #fff; border-color: #6366f1; }
+.screen-tab:hover:not(.active) { border-color: #6366f1; color: #6366f1; }
+
+/* ── Layout ── */
+.layout {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  max-width: 900px;
+  align-items: flex-start;
+}
+
+/* ── Phone ── */
+.phone-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.phone-frame {
+  width: 320px;
+  background: #fff;
+  border-radius: 40px;
+  border: 8px solid #1a1a2e;
+  box-shadow: 0 0 0 2px #2d2d4a, 0 30px 60px rgba(0,0,0,0.25), 0 8px 16px rgba(0,0,0,0.15);
+  overflow: hidden;
+  position: relative;
+}
+.phone-notch {
+  width: 110px; height: 24px;
+  background: #1a1a2e;
+  border-radius: 0 0 16px 16px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 20px 2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #111827;
+}
+.status-icons { display: flex; gap: 5px; align-items: center; }
+.screen-area {
+  height: 580px;
+  overflow: hidden;
+  position: relative;
+}
+.screen {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: none;
+  flex-direction: column;
+  background: #f8f9fb;
+  overflow: hidden;
+}
+.screen.active { display: flex; }
+
+/* ── Panels ── */
+.panel-header {
+  background: #fff;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid #f1f3f6;
+  flex-shrink: 0;
+}
+.panel-title { font-size: 20px; font-weight: 800; color: #111827; letter-spacing: -0.4px; }
+.panel-sub { font-size: 11px; color: #9ca3af; margin-bottom: 2px; }
+.panel-body { flex: 1; overflow-y: auto; padding: 10px 12px; }
+.panel-body::-webkit-scrollbar { width: 3px; }
+.panel-body::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 2px; }
+
+/* ── Chip ── */
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+  white-space: nowrap;
+}
+.chips-row { display: flex; gap: 6px; padding: 10px 0 2px; overflow-x: auto; }
+.chips-row::-webkit-scrollbar { display: none; }
+
+/* ── Cards ── */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.card-img {
+  height: 110px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  font-size: 36px;
+}
+.card-img-badge {
+  position: absolute; top: 8px; left: 8px;
+  display: flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: 12px;
+  font-size: 10px; font-weight: 600; color: #fff;
+}
+.card-body { padding: 10px 12px; }
+.card-title { font-size: 13px; font-weight: 700; color: #111827; line-height: 1.4; margin-bottom: 4px; }
+.card-desc { font-size: 11px; color: #6b7280; line-height: 1.5; margin-bottom: 6px; }
+.card-footer { display: flex; justify-content: space-between; align-items: center; }
+.card-source { font-size: 10px; color: #9ca3af; }
+.card-date { font-size: 10px; color: #9ca3af; }
+
+/* ── Tab bar ── */
+.tabbar {
+  display: flex;
+  border-top: 1px solid #f1f3f6;
+  background: #fff;
+  height: 56px;
+  flex-shrink: 0;
+}
+.tab-btn {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2px; cursor: pointer; background: none; border: none;
+  font-size: 9px; font-weight: 600; color: #9ca3af;
+  transition: color .15s;
+}
+.tab-btn.active { color: #6366f1; }
+.tab-btn svg { width: 20px; height: 20px; }
+.tab-center {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  margin-top: -18px;
+}
+.fab {
+  width: 48px; height: 48px; border-radius: 24px;
+  background: #6366f1; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border: none; box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+  transition: transform .15s;
+}
+.fab:hover { transform: scale(1.05); }
+.fab svg { width: 24px; height: 24px; color: #fff; }
+
+/* ── Category rows ── */
+.cat-row {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border-radius: 12px;
+  padding: 12px 12px; margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  cursor: pointer;
+}
+.cat-bubble {
+  width: 44px; height: 44px; border-radius: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.cat-info { flex: 1; }
+.cat-name { font-size: 13px; font-weight: 700; color: #111827; }
+.cat-meta { font-size: 10px; color: #9ca3af; margin-top: 1px; }
+.cat-bar { width: 4px; height: 24px; border-radius: 2px; margin-right: 2px; }
+.cat-subs { display: flex; gap: 5px; padding: 0 12px 10px; flex-wrap: wrap; }
+
+/* ── Add modal ── */
+.modal-handle {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: #e5e7eb; margin: 12px auto 16px;
+}
+.add-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px; border-radius: 12px;
+  background: #f8f9fb; border: 1px solid #f1f3f6;
+  margin-bottom: 10px; cursor: pointer;
+  transition: border-color .15s;
+}
+.add-option:hover { border-color: #6366f1; }
+.add-icon {
+  width: 52px; height: 52px; border-radius: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.add-label { font-size: 14px; font-weight: 700; color: #111827; }
+.add-desc { font-size: 11px; color: #9ca3af; margin-top: 2px; line-height: 1.4; }
+.chevron { color: #d1d5db; margin-left: auto; font-size: 16px; }
+
+/* ── Search ── */
+.search-bar {
+  display: flex; align-items: center; gap: 8px;
+  background: #f3f4f6; border-radius: 12px;
+  padding: 8px 12px; margin-top: 10px;
+}
+.search-placeholder { font-size: 13px; color: #9ca3af; }
+
+/* ── Profile ── */
+.profile-avatar {
+  width: 64px; height: 64px; border-radius: 32px;
+  background: #eef2ff; display: flex; align-items: center; justify-content: center;
+  font-size: 28px; margin: 0 auto 8px;
+}
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 12px 0; }
+.stat-card {
+  background: #fff; border-radius: 10px; padding: 10px 8px;
+  text-align: center; border-top: 3px solid #6366f1;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.stat-val { font-size: 18px; font-weight: 800; color: #111827; }
+.stat-lbl { font-size: 9px; color: #9ca3af; font-weight: 600; margin-top: 2px; }
+.menu-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+}
+.menu-icon {
+  width: 32px; height: 32px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+}
+
+/* ── Side panel ── */
+.side-panel { flex: 1; }
+.info-block {
+  background: #fff; border-radius: 16px; padding: 20px;
+  margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.info-title { font-size: 13px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+.stack-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+.stack-row:last-child { border: none; }
+.stack-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.stack-label { font-size: 13px; font-weight: 600; color: #111827; }
+.stack-desc { font-size: 11px; color: #9ca3af; }
+.feature-row { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; }
+.feat-dot { width: 8px; height: 8px; border-radius: 4px; background: #6366f1; margin-top: 4px; flex-shrink: 0; }
+.feat-text { font-size: 12px; color: #374151; line-height: 1.5; }
+.feat-done { color: #22c55e; font-size: 10px; font-weight: 600; margin-left: 4px; }
+.feat-soon { color: #f97316; font-size: 10px; font-weight: 600; margin-left: 4px; }
+.db-table { width: 100%; font-size: 11px; border-collapse: collapse; }
+.db-table th { text-align: left; color: #9ca3af; font-weight: 600; padding: 4px 6px; border-bottom: 1px solid #f3f4f6; }
+.db-table td { padding: 5px 6px; color: #374151; border-bottom: 1px solid #f9fafb; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 10px; }
+.db-badge { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; }
+.screen-label {
+  display: none;
+  font-size: 11px; font-weight: 600; color: #9ca3af;
+  text-align: center; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="logo">🔮 <span>Grimoire</span></div>
+  <div class="badge">Aperçu — React Native / Expo</div>
+  <div class="screen-tabs">
+    <button class="screen-tab active" onclick="switchScreen('home')">🏠 Accueil</button>
+    <button class="screen-tab" onclick="switchScreen('categories')">📁 Catégories</button>
+    <button class="screen-tab" onclick="switchScreen('add')">➕ Ajouter</button>
+    <button class="screen-tab" onclick="switchScreen('search')">🔍 Recherche</button>
+    <button class="screen-tab" onclick="switchScreen('profile')">👤 Profil</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- ── Phone ── -->
+  <div class="phone-wrap">
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><rect x="0" y="3" width="3" height="7" rx="1" fill="#111827"/><rect x="4" y="2" width="3" height="8" rx="1" fill="#111827"/><rect x="8" y="0" width="3" height="10" rx="1" fill="#111827"/><rect x="12" y="1" width="2" height="8" rx="1" fill="#d1d5db"/></svg>
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M7 2.5C9 2.5 10.8 3.3 12.1 4.6L13.5 3.2C11.8 1.6 9.5.5 7 .5S2.2 1.6.5 3.2L1.9 4.6C3.2 3.3 5 2.5 7 2.5Z" fill="#111827"/><path d="M7 5.5C8.3 5.5 9.5 6 10.4 6.9L11.8 5.5C10.5 4.3 8.8 3.5 7 3.5s-3.5.8-4.8 2L3.6 6.9C4.5 6 5.7 5.5 7 5.5Z" fill="#111827"/><circle cx="7" cy="9" r="1.5" fill="#111827"/></svg>
+          <svg width="22" height="10" viewBox="0 0 22 10" fill="none"><rect x="0" y="1" width="18" height="8" rx="2" stroke="#111827" stroke-width="1"/><rect x="1" y="2" width="13" height="6" rx="1" fill="#22c55e"/><rect x="19" y="3" width="2" height="4" rx="1" fill="#6b7280"/></svg>
+        </div>
+      </div>
+
+      <div class="screen-area">
+
+        <!-- HOME -->
+        <div class="screen active" id="screen-home">
+          <div class="panel-header">
+            <div class="panel-sub">Bonjour Alexandre 👋</div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div class="panel-title">Votre Grimoire</div>
+              <div style="width:32px;height:32px;border-radius:16px;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer">🔍</div>
+            </div>
+            <div class="chips-row">
+              <span class="chip" style="background:#6366f1;color:#fff">Tout</span>
+              <span class="chip" style="background:#eff6ff;color:#185fa5;border:1px solid #b5d4f4">✈️ Voyages</span>
+              <span class="chip" style="background:#fff3ed;color:#993c1d;border:1px solid #f5c4b3">🍕 Recettes</span>
+              <span class="chip" style="background:#eaf3de;color:#3b6d11;border:1px solid #c0dd97">🛒 Achats</span>
+              <span class="chip" style="background:#fbeaf0;color:#993556;border:1px solid #ed93b1">💡 Idées</span>
+            </div>
+            <div class="chips-row" style="padding-top:6px">
+              <span class="chip" style="background:#eef2ff;color:#6366f1;border:1px solid #afa9ec">🔷 Tout</span>
+              <span class="chip" style="background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb">🔗 Liens</span>
+              <span class="chip" style="background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb">🖼 Photos</span>
+              <span class="chip" style="background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb">📝 Notes</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div style="font-size:10px;color:#9ca3af;margin-bottom:8px">14 éléments</div>
+
+            <!-- Link card -->
+            <div class="card">
+              <div class="card-img" style="background:linear-gradient(135deg,#c7d7fe,#8192fa)">
+                🍕
+                <div class="card-img-badge" style="background:#6366f1">🔗 Lien</div>
+              </div>
+              <div class="card-body">
+                <div style="display:flex;gap:5px;margin-bottom:5px">
+                  <span class="chip" style="background:#fff3ed;color:#993c1d;border:1px solid #f5c4b3;font-size:10px">🍕 Recettes</span>
+                </div>
+                <div class="card-title">Les 10 meilleures pizzerias de Naples</div>
+                <div class="card-desc">Un guide complet pour manger authentique dans le berceau de la pizza napolitaine.</div>
+                <div class="card-footer">
+                  <span class="card-source">🌐 viaggiare.it</span>
+                  <span class="card-date">Il y a 2h</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Photo card -->
+            <div class="card">
+              <div class="card-img" style="background:linear-gradient(135deg,#fce7f3,#f43f5e40)">
+                🌅
+                <div class="card-img-badge" style="background:#ec4899">🖼 Photo</div>
+              </div>
+              <div class="card-body">
+                <div class="card-title">Coucher de soleil à Santorin</div>
+                <div class="card-footer">
+                  <span class="chip" style="background:#eff6ff;color:#185fa5;border:1px solid #b5d4f4;font-size:10px">✈️ Voyages</span>
+                  <span class="card-date">Hier</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Note card -->
+            <div class="card" style="padding:12px">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+                <span class="chip" style="background:#fff7ed;color:#854f0b;border:1px solid #fac775;font-size:10px">📝 Note</span>
+                <span class="chip" style="background:#fbeaf0;color:#993556;border:1px solid #ed93b1;font-size:10px">💡 Idées</span>
+              </div>
+              <div class="card-title">Idées cadeaux anniversaire maman</div>
+              <div class="card-desc">Livre cuisine japonaise, écharpe en soie bleue, abonnement yoga…</div>
+              <div class="card-footer">
+                <span></span>
+                <span class="card-date">Il y a 3 jours</span>
+              </div>
+            </div>
+
+            <!-- Link card 2 -->
+            <div class="card" style="padding:12px">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+                <span class="chip" style="background:#eef2ff;color:#534ab7;border:1px solid #afa9ec;font-size:10px">🔗 Lien</span>
+                <span class="chip" style="background:#eaf3de;color:#3b6d11;border:1px solid #c0dd97;font-size:10px">🛒 Achats</span>
+              </div>
+              <div class="card-title">Canapé modulable — Maisons du Monde</div>
+              <div class="card-desc">Modèle Oslo 3 places, tissu bouclette gris perle, livraison offerte.</div>
+              <div class="card-footer">
+                <span class="card-source">🌐 maisonsdumonde.com</span>
+                <span class="card-date">Il y a 5 jours</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabbar">
+            <button class="tab-btn active" onclick="switchScreen('home')">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Accueil
+            </button>
+            <button class="tab-btn" onclick="switchScreen('categories')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Catégories
+            </button>
+            <div class="tab-center">
+              <button class="fab" onclick="switchScreen('add')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+            <button class="tab-btn" onclick="switchScreen('search')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Recherche
+            </button>
+            <button class="tab-btn" onclick="switchScreen('profile')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil
+            </button>
+          </div>
+        </div>
+
+        <!-- CATEGORIES -->
+        <div class="screen" id="screen-categories">
+          <div class="panel-header">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div class="panel-title">Catégories</div>
+              <div style="width:32px;height:32px;border-radius:16px;background:#6366f1;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;color:#fff">+</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="cat-row" onclick="switchScreen('home')">
+              <div class="cat-bubble" style="background:#eff6ff">✈️</div>
+              <div class="cat-info">
+                <div class="cat-name">Voyages</div>
+                <div class="cat-meta">8 éléments · 3 sous-catégories</div>
+              </div>
+              <div class="cat-bar" style="background:#3b82f6"></div>
+              <span style="font-size:16px;color:#d1d5db">›</span>
+            </div>
+            <div style="display:flex;gap:5px;padding:0 12px 8px;margin-top:-4px">
+              <span class="chip" style="background:#eff6ff;color:#185fa5;border:1px solid #b5d4f4;font-size:10px">Europe</span>
+              <span class="chip" style="background:#eff6ff;color:#185fa5;border:1px solid #b5d4f4;font-size:10px">Asie</span>
+              <span class="chip" style="background:#eff6ff;color:#185fa5;border:1px solid #b5d4f4;font-size:10px">Amérique</span>
+            </div>
+
+            <div class="cat-row">
+              <div class="cat-bubble" style="background:#fff3ed">🍕</div>
+              <div class="cat-info">
+                <div class="cat-name">Recettes</div>
+                <div class="cat-meta">5 éléments · 2 sous-catégories</div>
+              </div>
+              <div class="cat-bar" style="background:#d85a30"></div>
+              <span style="font-size:16px;color:#d1d5db">›</span>
+            </div>
+            <div style="display:flex;gap:5px;padding:0 12px 8px;margin-top:-4px">
+              <span class="chip" style="background:#fff3ed;color:#993c1d;border:1px solid #f5c4b3;font-size:10px">Italien</span>
+              <span class="chip" style="background:#fff3ed;color:#993c1d;border:1px solid #f5c4b3;font-size:10px">Végétarien</span>
+            </div>
+
+            <div class="cat-row">
+              <div class="cat-bubble" style="background:#eaf3de">🛒</div>
+              <div class="cat-info">
+                <div class="cat-name">Achats</div>
+                <div class="cat-meta">3 éléments</div>
+              </div>
+              <div class="cat-bar" style="background:#639922"></div>
+              <span style="font-size:16px;color:#d1d5db">›</span>
+            </div>
+
+            <div class="cat-row">
+              <div class="cat-bubble" style="background:#fbeaf0">💡</div>
+              <div class="cat-info">
+                <div class="cat-name">Idées</div>
+                <div class="cat-meta">2 éléments</div>
+              </div>
+              <div class="cat-bar" style="background:#d4537e"></div>
+              <span style="font-size:16px;color:#d1d5db">›</span>
+            </div>
+
+            <!-- New category button -->
+            <div style="margin-top:12px;border:1.5px dashed #e5e7eb;border-radius:12px;padding:14px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:#9ca3af;font-size:13px;font-weight:600">
+              <span style="font-size:18px">+</span> Nouvelle catégorie
+            </div>
+          </div>
+
+          <div class="tabbar">
+            <button class="tab-btn" onclick="switchScreen('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Accueil</button>
+            <button class="tab-btn active" onclick="switchScreen('categories')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Catégories</button>
+            <div class="tab-center"><button class="fab" onclick="switchScreen('add')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></div>
+            <button class="tab-btn" onclick="switchScreen('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Recherche</button>
+            <button class="tab-btn" onclick="switchScreen('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil</button>
+          </div>
+        </div>
+
+        <!-- ADD MODAL -->
+        <div class="screen" id="screen-add" style="background:#fff">
+          <div class="modal-handle"></div>
+          <div style="padding:0 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <div style="font-size:18px;font-weight:800;color:#111827">Ajouter un contenu</div>
+            <div onclick="switchScreen('home')" style="width:32px;height:32px;border-radius:16px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#6b7280">✕</div>
+          </div>
+          <div style="font-size:12px;color:#9ca3af;padding:0 16px 16px;line-height:1.5">Choisissez le type de contenu à ajouter à votre Grimoire.</div>
+          <div style="padding:0 16px;flex:1">
+            <div class="add-option">
+              <div class="add-icon" style="background:#eef2ff">🔗</div>
+              <div>
+                <div class="add-label">Lien web</div>
+                <div class="add-desc">Sauvegardez une URL avec prévisualisation automatique Open Graph</div>
+              </div>
+              <span class="chevron">›</span>
+            </div>
+            <div class="add-option">
+              <div class="add-icon" style="background:#fce7f3">🖼️</div>
+              <div>
+                <div class="add-label">Photo</div>
+                <div class="add-desc">Importez depuis la galerie ou prenez une photo</div>
+              </div>
+              <span class="chevron">›</span>
+            </div>
+            <div class="add-option">
+              <div class="add-icon" style="background:#fff7ed">📝</div>
+              <div>
+                <div class="add-label">Note</div>
+                <div class="add-desc">Rédigez une note textuelle libre</div>
+              </div>
+              <span class="chevron">›</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="screen" id="screen-search">
+          <div class="panel-header">
+            <div class="panel-title">Recherche</div>
+            <div class="search-bar">
+              <span style="font-size:14px">🔍</span>
+              <span class="search-placeholder">Rechercher dans votre Grimoire…</span>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px">
+            <div style="width:64px;height:64px;border-radius:32px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:28px">✨</div>
+            <div style="font-size:15px;font-weight:700;color:#374151">Recherche full-text</div>
+            <div style="font-size:12px;color:#9ca3af;text-align:center;line-height:1.5">Recherchez parmi vos 14 éléments.<br>Titre, description, métadonnées OG.</div>
+            <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;justify-content:center">
+              <span class="chip" style="background:#eef2ff;color:#6366f1;border:1px solid #afa9ec;font-size:10px">Naples</span>
+              <span class="chip" style="background:#eef2ff;color:#6366f1;border:1px solid #afa9ec;font-size:10px">Santorin</span>
+              <span class="chip" style="background:#eef2ff;color:#6366f1;border:1px solid #afa9ec;font-size:10px">Cadeaux</span>
+            </div>
+          </div>
+          <div class="tabbar">
+            <button class="tab-btn" onclick="switchScreen('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Accueil</button>
+            <button class="tab-btn" onclick="switchScreen('categories')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Catégories</button>
+            <div class="tab-center"><button class="fab" onclick="switchScreen('add')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></div>
+            <button class="tab-btn active" onclick="switchScreen('search')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Recherche</button>
+            <button class="tab-btn" onclick="switchScreen('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil</button>
+          </div>
+        </div>
+
+        <!-- PROFILE -->
+        <div class="screen" id="screen-profile">
+          <div style="background:#fff;padding:16px;text-align:center;border-bottom:1px solid #f1f3f6">
+            <div class="profile-avatar">📖</div>
+            <div style="font-size:18px;font-weight:800;color:#111827">Grimoire</div>
+            <div style="font-size:11px;color:#9ca3af;margin-top:2px">Votre mémoire numérique</div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card" style="border-top-color:#6366f1"><div class="stat-val">14</div><div class="stat-lbl">Total</div></div>
+            <div class="stat-card" style="border-top-color:#ec4899"><div class="stat-val">6</div><div class="stat-lbl">Photos</div></div>
+            <div class="stat-card" style="border-top-color:#f97316"><div class="stat-val">5</div><div class="stat-lbl">Liens</div></div>
+            <div class="stat-card" style="border-top-color:#22c55e"><div class="stat-val">3</div><div class="stat-lbl">Notes</div></div>
+            <div class="stat-card" style="border-top-color:#14b8a6"><div class="stat-val">4</div><div class="stat-lbl">Catég.</div></div>
+            <div class="stat-card" style="border-top-color:#8b5cf6"><div class="stat-val">7</div><div class="stat-lbl">Sous-cat.</div></div>
+          </div>
+          <div style="margin:10px 12px 0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+            <div class="menu-item"><div class="menu-icon" style="background:#eef2ff">📤</div><span style="font-size:13px;font-weight:600;flex:1;color:#111827">Exporter mes données (JSON)</span><span style="color:#d1d5db">›</span></div>
+            <div class="menu-item"><div class="menu-icon" style="background:#f3f4f6">🌙</div><span style="font-size:13px;font-weight:600;flex:1;color:#111827">Mode sombre</span><span style="font-size:10px;background:#fff7ed;color:#854f0b;padding:2px 8px;border-radius:8px;font-weight:600">Bientôt</span></div>
+            <div class="menu-item"><div class="menu-icon" style="background:#eff6ff">☁️</div><span style="font-size:13px;font-weight:600;flex:1;color:#111827">Sync cloud (Supabase)</span><span style="font-size:10px;background:#fff7ed;color:#854f0b;padding:2px 8px;border-radius:8px;font-weight:600">Bientôt</span></div>
+            <div class="menu-item" style="border:none"><div class="menu-icon" style="background:#f3f4f6">ℹ️</div><span style="font-size:13px;font-weight:600;flex:1;color:#111827">À propos — v1.0.0</span><span style="color:#d1d5db">›</span></div>
+          </div>
+          <div class="tabbar" style="margin-top:auto">
+            <button class="tab-btn" onclick="switchScreen('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Accueil</button>
+            <button class="tab-btn" onclick="switchScreen('categories')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Catégories</button>
+            <div class="tab-center"><button class="fab" onclick="switchScreen('add')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></div>
+            <button class="tab-btn" onclick="switchScreen('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Recherche</button>
+            <button class="tab-btn active" onclick="switchScreen('profile')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>Profil</button>
+          </div>
+        </div>
+
+      </div><!-- /screen-area -->
+    </div><!-- /phone-frame -->
+  </div><!-- /phone-wrap -->
+
+  <!-- ── Side panel ── -->
+  <div class="side-panel">
+
+    <div class="info-block">
+      <div class="info-title">Stack technique</div>
+      <div class="stack-row"><div class="stack-icon" style="background:#eef2ff">⚛️</div><div><div class="stack-label">React Native + Expo SDK 55</div><div class="stack-desc">iOS & Android · TypeScript strict</div></div></div>
+      <div class="stack-row"><div class="stack-icon" style="background:#f0fdf4">🗄️</div><div><div class="stack-label">expo-sqlite</div><div class="stack-desc">Offline-first · WAL mode · Foreign keys</div></div></div>
+      <div class="stack-row"><div class="stack-icon" style="background:#fff7ed">🐻</div><div><div class="stack-label">Zustand</div><div class="stack-desc">itemsStore · categoriesStore</div></div></div>
+      <div class="stack-row"><div class="stack-icon" style="background:#fce7f3">🎨</div><div><div class="stack-label">NativeWind v4</div><div class="stack-desc">Tailwind CSS pour React Native</div></div></div>
+      <div class="stack-row"><div class="stack-icon" style="background:#eff6ff">🧭</div><div><div class="stack-label">Expo Router v4</div><div class="stack-desc">File-based routing · Typed routes</div></div></div>
+      <div class="stack-row"><div class="stack-icon" style="background:#f0fdfa">🔗</div><div><div class="stack-label">Microlink API</div><div class="stack-desc">Scraping Open Graph automatique</div></div></div>
+    </div>
+
+    <div class="info-block">
+      <div class="info-title">Schéma base de données</div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:10px;font-weight:700;color:#6b7280;margin-bottom:4px">TABLE items</div>
+        <table class="db-table">
+          <tr><th>Colonne</th><th>Type</th><th>Note</th></tr>
+          <tr><td>id</td><td><span class="db-badge" style="background:#eef2ff;color:#534ab7">TEXT PK</span></td><td>UUID généré</td></tr>
+          <tr><td>type</td><td><span class="db-badge" style="background:#fff7ed;color:#854f0b">CHECK</span></td><td>link | photo | note</td></tr>
+          <tr><td>title</td><td>TEXT</td><td>NOT NULL</td></tr>
+          <tr><td>og_title / og_image</td><td>TEXT</td><td>Open Graph</td></tr>
+          <tr><td>category_id</td><td><span class="db-badge" style="background:#eaf3de;color:#3b6d11">FK</span></td><td>→ categories</td></tr>
+          <tr><td>created_at</td><td>TEXT</td><td>ISO 8601</td></tr>
+        </table>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:10px;font-weight:700;color:#6b7280;margin-bottom:4px">TABLE categories</div>
+        <table class="db-table">
+          <tr><th>Colonne</th><th>Type</th><th>Note</th></tr>
+          <tr><td>id</td><td><span class="db-badge" style="background:#eef2ff;color:#534ab7">TEXT PK</span></td><td></td></tr>
+          <tr><td>name</td><td>TEXT</td><td>NOT NULL</td></tr>
+          <tr><td>color</td><td>TEXT</td><td>Hex #rrggbb</td></tr>
+          <tr><td>icon</td><td>TEXT</td><td>Emoji</td></tr>
+        </table>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:#6b7280;margin-bottom:4px">TABLE subcategories</div>
+        <table class="db-table">
+          <tr><th>Colonne</th><th>Type</th><th>Note</th></tr>
+          <tr><td>id</td><td><span class="db-badge" style="background:#eef2ff;color:#534ab7">TEXT PK</span></td><td></td></tr>
+          <tr><td>category_id</td><td><span class="db-badge" style="background:#eaf3de;color:#3b6d11">FK</span></td><td>CASCADE DELETE</td></tr>
+          <tr><td>name</td><td>TEXT</td><td>NOT NULL</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="info-block">
+      <div class="info-title">Fonctionnalités</div>
+      <div class="feature-row"><div class="feat-dot"></div><div class="feat-text">Ajout de lien avec prévisualisation Open Graph<span class="feat-done">✓ Fait</span></div></div>
+      <div class="feature-row"><div class="feat-dot"></div><div class="feat-text">Import photo (galerie + appareil photo)<span class="feat-done">✓ Fait</span></div></div>
+      <div class="feature-row"><div class="feat-dot"></div><div class="feat-text">Rédaction de note avec compteur de mots<span class="feat-done">✓ Fait</span></div></div>
+      <div class="feature-row"><div class="feat-dot"></div><div class="feat-text">Catégories avec couleur + icône personnalisables<span class="feat-done">✓ Fait</span></div></div>
+      <div class="feature-row"><div class="feat-dot"></div><div class="feat-text">Sous-catégories imbriquées<span class="feat-done">✓ Fait</span></div></div>
+      <div class="feature-row"><div class="feat-dot"></div><div class="feat-text">Filtres par type et par catégorie<span class="feat-done">✓ Fait</span></div></div>
+      <div class="feature-row"><div class="feat-dot"></div><div class="feat-text">Recherche full-text SQLite<span class="feat-done">✓ Fait</span></div></div>
+      <div class="feature-row"><div class="feat-dot"></div><div class="feat-text">Stockage local offline-first (SQLite WAL)<span class="feat-done">✓ Fait</span></div></div>
+      <div class="feature-row"><div class="feat-dot"></div><div class="feat-text">Export JSON des données<span class="feat-done">✓ Fait</span></div></div>
+      <div class="feature-row"><div class="feat-dot" style="background:#f97316"></div><div class="feat-text">Mode sombre<span class="feat-soon">→ Bientôt</span></div></div>
+      <div class="feature-row"><div class="feat-dot" style="background:#f97316"></div><div class="feat-text">Synchronisation cloud Supabase<span class="feat-soon">→ Bientôt</span></div></div>
+      <div class="feature-row"><div class="feat-dot" style="background:#f97316"></div><div class="feat-text">Viewer photo plein écran avec zoom<span class="feat-soon">→ Bientôt</span></div></div>
+    </div>
+
+    <div style="text-align:center;font-size:11px;color:#9ca3af;padding-top:4px">Grimoire v1.0.0 · React Native + Expo SDK 55 · SQLite + Zustand</div>
+  </div>
+
+</div><!-- /layout -->
+
+<script>
+function switchScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  document.querySelectorAll('.screen-tab').forEach((t, i) => {
+    const ids = ['home','categories','add','search','profile'];
+    t.classList.toggle('active', ids[i] === id);
+  });
+}
+</script>
+</body>
+</html>
