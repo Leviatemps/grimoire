@@ -59,6 +59,15 @@
       "typedRoutes": true
     },
     "scheme": "grimoire",
+    "updates": {
+      "url": "https://u.expo.dev/79b7f855-ed52-42e3-b835-21e4dbcc75d4",
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "extra": {
       "router": {},
       "eas": {
