@@ -45,9 +45,14 @@ export default function CategoryDetailScreen() {
     <View>
       {/* Category hero */}
       <View style={[styles.hero, { paddingTop: insets.top + 8 }]}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-          <Ionicons name="chevron-back" size={22} color="#111827" />
-        </TouchableOpacity>
+        <View style={styles.heroTopRow}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.back}>
+            <Ionicons name="chevron-back" size={22} color="#111827" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push(`/category/edit/${id}`)} style={styles.editBtn}>
+            <Ionicons name="pencil" size={18} color="#6366f1" />
+          </TouchableOpacity>
+        </View>
         <View style={[styles.iconBubble, { backgroundColor: `${category.color}20` }]}>
           <Text style={styles.icon}>{category.icon}</Text>
         </View>
@@ -139,9 +144,22 @@ const styles = StyleSheet.create({
     borderBottomColor: '#f1f3f6',
     gap: 8,
   },
+  heroTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+  },
   back: {
-    alignSelf: 'flex-start',
     padding: 4,
+  },
+  editBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#f0f0ff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   iconBubble: {
     width: 72,

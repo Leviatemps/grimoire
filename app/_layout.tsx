@@ -43,8 +43,9 @@ export default function RootLayout() {
           <Stack.Screen name="add/link"        options={{ presentation: 'modal' }} />
           <Stack.Screen name="add/photo"       options={{ presentation: 'modal' }} />
           <Stack.Screen name="add/note"        options={{ presentation: 'modal' }} />
-          <Stack.Screen name="category/create" options={{ presentation: 'modal' }} />
-          <Stack.Screen name="category/[id]"   options={{ presentation: 'card'  }} />
+          <Stack.Screen name="category/create"   options={{ presentation: 'modal' }} />
+          <Stack.Screen name="category/[id]"     options={{ presentation: 'card'  }} />
+          <Stack.Screen name="category/edit/[id]" options={{ presentation: 'modal' }} />
           <Stack.Screen name="item/[id]"       options={{ presentation: 'card'  }} />
           <Stack.Screen name="item/edit/[id]"  options={{ presentation: 'modal' }} />
         </Stack>

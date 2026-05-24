@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Share, useColorScheme } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useItemsStore } from '../../src/stores/itemsStore';
@@ -28,20 +28,11 @@ export default function ProfileScreen() {
   const photos = items.filter((i) => i.type === 'photo').length;
   const notes  = items.filter((i) => i.type === 'note').length;
 
-  const handleExport = async () => {
-    const data = JSON.stringify({ items, categories }, null, 2);
-    try { await Share.share({ title: 'Grimoire — Export', message: data }); }
-    catch { Alert.alert('Erreur', "Impossible d'exporter les données."); }
-  };
-
   const isDark = scheme === 'dark';
 
   const MENU_ITEMS = [
-    { icon: 'share-outline',    label: 'Exporter mes données (JSON)', color: t.primary, onPress: handleExport },
     { icon: isDark ? 'moon' : 'moon-outline', label: `Mode sombre · ${isDark ? 'Actif' : 'Inactif (système)'}`, color: '#374151', onPress: () => Alert.alert('Mode sombre', 'Le mode sombre suit automatiquement les réglages de votre téléphone.\nActivez-le dans Réglages → Affichage.') },
-    { icon: 'cloud-outline',    label: 'Synchronisation cloud',       color: '#3b82f6', onPress: () => Alert.alert('Bientôt', 'La sync Supabase arrive prochainement.') },
     { icon: 'lock-closed-outline', label: 'Confidentialité',          color: '#10b981', onPress: () => {} },
-    { icon: 'help-circle-outline', label: 'Aide & support',           color: '#f59e0b', onPress: () => {} },
     { icon: 'information-circle-outline', label: 'À propos de Grimoire', color: t.textTertiary, onPress: () => Alert.alert('Grimoire', 'Version 1.0.0\nVotre mémoire numérique personnelle.') },
   ];
 
